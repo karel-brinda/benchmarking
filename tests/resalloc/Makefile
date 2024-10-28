@@ -1,4 +1,4 @@
-.PHONY: all help clean cleanall view
+.PHONY: all help clean cleanall view format
 
 SHELL=/usr/bin/env bash -eo pipefail
 
@@ -12,6 +12,10 @@ SHELL=/usr/bin/env bash -eo pipefail
 
 all:
 	cargo build --release
+
+format:
+	cargo fmt --all
+
 
 help: ## Print help messages
 	@echo -e "$$(grep -hE '^\S*(:.*)?##' $(MAKEFILE_LIST) \

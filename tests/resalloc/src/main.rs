@@ -16,7 +16,6 @@ use std::time::Duration;
         .args(&["duration", "wait_forever"]),
 ))]
 
-
 struct Args {
     /// Amount of RAM to allocate (e.g., 512MB, 2GB)
     #[arg(short, long, value_name = "SIZE", required = true)]
@@ -39,7 +38,9 @@ fn main() {
         Ok(size) => {
             // Allocate the memory
             let mut memory: Vec<u8> = Vec::with_capacity(size as usize);
-            unsafe { memory.set_len(size as usize); }
+            unsafe {
+                memory.set_len(size as usize);
+            }
 
             // Touch each page to ensure the memory is actually allocated
             touch_memory(&mut memory);
@@ -52,7 +53,10 @@ fn main() {
                 }
             } else {
                 let wait_time = args.duration.unwrap_or(1);
-                println!("Allocated {} bytes. Waiting for {} second(s)...", size, wait_time);
+                println!(
+                    "Allocated {} bytes. Waiting for {} second(s)...",
+                    size, wait_time
+                );
                 sleep(Duration::from_secs(wait_time));
             }
         }
@@ -94,7 +98,9 @@ fn parse_amount(s: &str) -> Result<u64, String> {
         return Err("Invalid number format".to_string());
     }
 
-    let num: f64 = num_str.parse().map_err(|_| "Invalid number format".to_string())?;
+    let num: f64 = num_str
+        .parse()
+        .map_err(|_| "Invalid number format".to_string())?;
 
     let multiplier = match suffix.trim().to_uppercase().as_str() {
         "B" | "" => 1.0,
